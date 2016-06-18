@@ -31,6 +31,21 @@ public class Train {
         mTrainInfo = trainInfo;
     }
 
+    public void setTrainProperties(){
+        setCategoryOfArrival();
+        setCategoryOfDeparture();
+        setDelayOfArrival();
+        setDelayOfDeparture();
+        setFrom();
+        setNumber();
+        setReasonForDelayOfArrival();
+        setReasonForDelayOfDeparture();
+        setTimeOfArrival();
+        setTimeOfdeparture();
+        setTrakOfArrival();
+        setTrakOfDeparture();
+    }
+
     public void setReasonForDelayOfArrival() {
 
         mReasonForDelayOfArrival = mTrainInfo.get(7);
@@ -38,7 +53,7 @@ public class Train {
 
     public void setReasonForDelayOfDeparture() {
 
-        mReasonForDelayOfDeparture = mTrainInfo.get(21);
+        mReasonForDelayOfDeparture = mTrainInfo.get(15);
     }
 
     public String getReasonForDelayOfArrival() {
@@ -68,7 +83,7 @@ public class Train {
 
     public void setDelayOfDeparture() {
 
-        mDelayOfDeparture = mTrainInfo.get(20);
+        mDelayOfDeparture = mTrainInfo.get(14);
     }
 
     public String getmDelayOfDeparture() {
@@ -88,7 +103,7 @@ public class Train {
 
     public void setTrakOfDeparture() {
 
-        mTrakOfDeparture = mTrainInfo.get(19);
+        mTrakOfDeparture = mTrainInfo.get(13);
     }
 
     public String getTrakOfDeparture() {
@@ -126,7 +141,7 @@ public class Train {
 
     public void setTimeOfdeparture() {
 
-        mTimeOfDeparture = mTrainInfo.get(18);
+        mTimeOfDeparture = mTrainInfo.get(12);
     }
 
     public void setNumber(){
@@ -163,7 +178,7 @@ public class Train {
         return mTo;
     }
 
-    public String getmimeOfArrival() {
+    public String getTimeOfArrival() {
 
         return mTimeOfArrival;
     }
@@ -174,8 +189,10 @@ public class Train {
     }
 
     public void logTrainInfo(){
+        int counter = 0;
         for (String line: mTrainInfo) {
-            Log.i(TAG, "train properties " + line);
+            Log.i(TAG, "train properties " + counter + line);
+            counter++;
         }
     }
 

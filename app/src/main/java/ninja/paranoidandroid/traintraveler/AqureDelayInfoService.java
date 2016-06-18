@@ -3,9 +3,6 @@ package ninja.paranoidandroid.traintraveler;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-
-import java.io.IOException;
 
 import ninja.paranoidandroid.traintraveler.util.HtmlParser;
 
@@ -15,6 +12,7 @@ import ninja.paranoidandroid.traintraveler.util.HtmlParser;
 public class AqureDelayInfoService extends AqureBDZInfoService {
 
     private final static String TAG = "AQUIRE DELAy SERVICE";
+    private int mNotificationId;
 
     public AqureDelayInfoService(){
         super();
@@ -24,29 +22,31 @@ public class AqureDelayInfoService extends AqureBDZInfoService {
     @Override
     protected void aquireInformation() {
 //
-        HtmlParser htmlParser = new HtmlParser();
+        HtmlParser htmlParser = new HtmlParser("2641");
 //
         htmlParser.getTrainInfo("http://razpisanie.bdz.bg/SearchServlet?action=listStationDelay&fromStationName=Pleven");
+        htmlParser.filterListElements();
         htmlParser.stripHtlmTags("<td>");
         htmlParser.stripHtlmTags("</td>");
         //htmlParser.logTrainInfo();
         Train train = htmlParser.createTrain();
+        train.setTrainProperties();
+        train.logTrainInfo();
         createNotification(train);
 
     }
 
     private void createNotification(Train train){
-
+        mNotificationId = 1;
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.loko)
-                        .setContentTitle("Delay of arrival")
-                        .setContentText(train.getmDelayOfArrival());
-        Log.i(TAG, "in service" + train.getmDelayOfArrival());
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        .setContentTitle("Time of arrival")
+                        .setContentText(train.getTimeOfArrival());
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
-        mNotificationManager.notify(1 ,mBuilder.build());
+        mNotificationManager.notify(mNotificationId ,mBuilder.build());
 
     }
 }

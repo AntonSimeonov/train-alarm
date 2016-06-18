@@ -1,5 +1,6 @@
-package ninja.paranoidandroid.traintraveler.util;
+package ninja.paranoidandroid.traintraveler;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -9,29 +10,18 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import ninja.paranoidandroid.traintraveler.Train;
+import ninja.paranoidandroid.traintraveler.util.HtmlParser;
 
 /**
- * Created by anton on 01.06.16.
+ * Created by anton on 18.06.16.
  */
-public class HtmlParser {
+public class Test {
 
-    private static final String TAG = "HTMPL_PARSER";
-
-    private String mTrainNumber;
+    private static final String TAG = "TEST CLASS :)";
 
     private ArrayList<String> mTrainInfo = new ArrayList<String>();
-
-    public HtmlParser(String trainNumber){
-        mTrainNumber = trainNumber;
-    }
 
     public InputStream connectTOURL(String url) throws IOException{
         URLConnection connection = (new URL(url)).openConnection();
@@ -55,7 +45,7 @@ public class HtmlParser {
 
             while((line = reader.readLine()) != null){
 
-                if(line.contains(mTrainNumber)){
+                if(line.contains("9647")){
 
                     while(!line.contains("/tr")){
 
@@ -87,27 +77,70 @@ public class HtmlParser {
 
     public void logTrainInfo(){
         int counter = 0;
+        try {
+            mTrainInfo.removeAll(Collections.singleton(null));
+        }catch (Exception ex){
 
+        }
         for (String line: mTrainInfo) {
             Log.i(TAG, "train properties at " + counter + line);
             counter++;
         }
     }
 
-    public void filterListElements(){
+    private String filterLine(String line){
+
+
+        return null;
+    }
+
+    private void filterListElements(){
         ArrayList<String> filteredList = new ArrayList<String>();
 
         for (String line: mTrainInfo) {
 
             if(line.contains("td")){
-
                 filteredList.add(line);
-
             }
+
         }
 
         mTrainInfo = filteredList;
+
     }
 
+    public void printLogStringList(){
+
+        new TestAsyncRegEx().execute();
+
+    }
+
+    public class TestAsyncRegEx extends AsyncTask<Void, Void, Void> {
+        public int mIndexNumber = 0;
+        public String mHtmlText = null;
+        public String mJavaScriptTrainClass = null;
+        public String mTableContent = null;
+        public String mTrainInfo = null;
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+                getTrainInfo("http://razpisanie.bdz.bg/SearchServlet?action=listStationDelay&fromStationName=Pleven");
+                filterListElements();
+                //stripHtlmTags("<td>");
+                //stripHtlmTags("</td>");
+                logTrainInfo();
+                //Train train = createTrain();
+                //train.logTrainInfo();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
+    }
 
 }
