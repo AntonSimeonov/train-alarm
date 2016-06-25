@@ -1,4 +1,4 @@
-package ninja.paranoidandroid.traintraveler;
+package ninja.paranoidandroid.traintraveler.test;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,6 +12,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ninja.paranoidandroid.traintraveler.Train;
+import ninja.paranoidandroid.traintraveler.db.DBHelper;
 import ninja.paranoidandroid.traintraveler.util.HtmlParser;
 
 /**
@@ -142,5 +144,7 @@ public class Test {
 
         }
     }
+
+
 
 }

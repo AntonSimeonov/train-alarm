@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Train Traveler</string>
+    <string name="title_activity_create_train_alarm">CreateTrainAlarm</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="content_create_train_alarm_train_station_name">Enter train station name</string>
+    <string name="content_create_train_alarm_train_number">Enter train number</string>
 </resources>
