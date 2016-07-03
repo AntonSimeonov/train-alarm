@@ -13,13 +13,12 @@ public abstract class AqureBDZInfoService extends IntentService {
     private Train mTrain;
 
 
-
-
     public AqureBDZInfoService(){
         super("BDZInfoService");
+
     }
 
-    protected abstract void aquireInformation();
+    protected abstract void aquireInformation(Intent intent);
 
     @Override
     public void onCreate() {
@@ -28,13 +27,24 @@ public abstract class AqureBDZInfoService extends IntentService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
-        return super.onStartCommand(intent, flags, startId);
+    public IBinder onBind(Intent intent) {
+        return super.onBind(intent);
     }
+
+
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        aquireInformation();
+
+        aquireInformation(intent);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        SleeplesBroadcastReciver.mWakeLock.release();
+
     }
 }

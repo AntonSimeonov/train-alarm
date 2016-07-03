@@ -2,7 +2,9 @@ package ninja.paranoidandroid.traintraveler;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import ninja.paranoidandroid.traintraveler.util.HtmlParser;
 
@@ -11,8 +13,13 @@ import ninja.paranoidandroid.traintraveler.util.HtmlParser;
  */
 public class AqureDelayInfoService extends AqureBDZInfoService {
 
-    private final static String TAG = "AQUIRE DELAy SERVICE";
+    private final static String TAG = "AQUIRE_DELAY_SERVICE";
     private int mNotificationId;
+
+    private String mTrainScheduleURL = "http://razpisanie.bdz.bg/SearchServlet?action=listStationDelay&fromStationName=";
+
+    private String mTrainStationName;
+    private String mTrainNumber;
 
     public AqureDelayInfoService(){
         super();
@@ -20,19 +27,32 @@ public class AqureDelayInfoService extends AqureBDZInfoService {
 
     //Here we get information from BDZ site, for train delay.
     @Override
-    protected void aquireInformation() {
-//
-        HtmlParser htmlParser = new HtmlParser("2641");
-//
-        htmlParser.getTrainInfo("http://razpisanie.bdz.bg/SearchServlet?action=listStationDelay&fromStationName=Pleven");
+    protected void aquireInformation(Intent intent) {
+
+
+        setTrainAlarmProperties(intent);
+
+        HtmlParser htmlParser = new HtmlParser(mTrainNumber);
+
+        Log.i(TAG, "Path is " + mTrainScheduleURL + mTrainStationName);
+
+        htmlParser.getTrainInfo(mTrainScheduleURL + mTrainStationName);
         htmlParser.filterListElements();
         htmlParser.stripHtlmTags("<td>");
         htmlParser.stripHtlmTags("</td>");
-        //htmlParser.logTrainInfo();
         Train train = htmlParser.createTrain();
         train.setTrainProperties();
-        train.logTrainInfo();
         createNotification(train);
+
+    }
+
+    private void setTrainAlarmProperties(Intent intent){
+
+        Intent alarmIntent = intent.getParcelableExtra("original_intent");
+        mTrainStationName = alarmIntent.getStringExtra("trainStationName");
+        mTrainNumber = alarmIntent.getStringExtra("trainNumber");
+
+        Log.i(TAG, "trainstation name " + mTrainStationName + " train number " + mTrainNumber);
 
     }
 

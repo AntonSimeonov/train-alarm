@@ -3,6 +3,7 @@
     package="ninja.paranoidandroid.traintraveler">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -12,15 +13,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
 
-        <service
-            android:name=".AqureDelayInfoService"
-            android:exported="false" />
-
         <activity
             android:name=".AlarmList"
             android:label="@string/title_activity_create_train_alarm"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".CreatTrainAlarm" />
+
         <activity android:name=".Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".test.TestActivity"></activity>
+
+        <activity android:name=".test.TestActivity"/>
+
+        <service
+            android:name=".AqureDelayInfoService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".TrainAlarmBroadcastReciver"
+            />
+
     </application>
 
 </manifest>

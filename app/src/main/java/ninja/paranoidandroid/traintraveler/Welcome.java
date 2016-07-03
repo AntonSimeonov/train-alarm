@@ -17,7 +17,7 @@ public class Welcome extends AppCompatActivity {
 
         new InitDatabase().execute();
 
-        Intent intent = new Intent(this, TestActivity.class);
+        Intent intent = new Intent(this, CreatTrainAlarm.class);
         startActivity(intent);
     }
 
