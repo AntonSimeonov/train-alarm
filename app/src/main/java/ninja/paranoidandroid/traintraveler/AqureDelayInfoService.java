@@ -57,16 +57,45 @@ public class AqureDelayInfoService extends AqureBDZInfoService {
     }
 
     private void createNotification(Train train){
-        mNotificationId = 1;
+
+        mNotificationId = train.getNumber();
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.loko)
-                        .setContentTitle("Time of arrival")
-                        .setContentText(train.getTimeOfArrival());
+                        .setContentTitle("Train info")
+                        .setContentText(createNotificationText(train));
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
         mNotificationManager.notify(mNotificationId ,mBuilder.build());
 
+    }
+
+    private String createNotificationText(Train train){
+
+        String notificationText = "";
+        notificationText += "Delay: " + formatDelayNotificationText(train.getmDelayOfArrival()) + "\n";
+        notificationText += "Arrival: " + train.getTimeOfArrival() + "\n";
+        //notificationText += "Reason of dellay " + train.getReasonForDelayOfArrival() + "\n";
+
+        return notificationText;
+    }
+
+    private String formatDelayNotificationText(String delayInformation){
+
+        String formatedString = "";
+        int delay = Integer.parseInt(delayInformation);
+
+        if(delay == 0){
+
+            formatedString = " no delay.";
+
+        }else{
+
+            formatedString = delay + " min delay.";
+
+        }
+
+        return formatedString;
     }
 }

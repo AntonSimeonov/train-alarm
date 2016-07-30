@@ -12,9 +12,11 @@ public class InsertNewTrainAlarm extends SQLiteQuery {
     private String mTrainStation;
     private String mTrainNumber;
     private String mTimeToNotify;
+    private int mAlarmId;
 
-    public InsertNewTrainAlarm(String trainStation, String trainNumber, String timeToNotify){
+    public InsertNewTrainAlarm(int alarmId, String trainStation, String trainNumber, String timeToNotify){
 
+        mAlarmId = alarmId;
         mTrainStation = trainStation;
         mTrainNumber = trainNumber;
         mTimeToNotify = timeToNotify;
@@ -26,7 +28,7 @@ public class InsertNewTrainAlarm extends SQLiteQuery {
     @Override
     public Cursor query() {
 
-        mDBOperations.insertNewTrainAlarm(mTrainStation, mTrainNumber, mTimeToNotify);
+        mDBOperations.insertNewTrainAlarm(mAlarmId, mTrainStation, mTrainNumber, mTimeToNotify);
 
         return null;
     }

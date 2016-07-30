@@ -15,7 +15,9 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Date;
 
+import ninja.paranoidandroid.traintraveler.db.DBOperations;
 import ninja.paranoidandroid.traintraveler.db.InsertNewTrainAlarm;
 import ninja.paranoidandroid.traintraveler.util.SQLiteFragment;
 
@@ -49,11 +51,12 @@ public class CreatTrainAlarm extends AppCompatActivity {
         mTrainStationName = (EditText) findViewById(R.id.et_content_create_train_alarm_train_station_name);
         mTrainNumber = (EditText) findViewById(R.id.et_content_create_train_alarm_train_number);
         mTimePicker = (TimePicker) findViewById(R.id.tp_content_create_train_alarm_time_of_activation);
+        mTimePicker.setIs24HourView(true);
         mCancel = (Button) findViewById(R.id.b_content_create_train_alarm_cancel);
         mOk = (Button) findViewById(R.id.b_content_create_train_alarm_ok);
 
-        //setFragmentManager();
-        //setSQLiteFragment();
+        setFragmentManager();
+        setSQLiteFragment();
 
     }
 
@@ -70,12 +73,16 @@ public class CreatTrainAlarm extends AppCompatActivity {
                 int hour = mTimePicker.getCurrentHour();
                 int minutes = mTimePicker.getCurrentMinute();
                 String alarmTime = "" + hour + ":" + minutes;
-                //InsertNewTrainAlarm insertNewTrainAlarm = new InsertNewTrainAlarm(trainStationName, trainNumber, alarmTime);
+                int alarmId = createUniqueAlarmId();
 
-                createAlarm(trainStationName, trainNumber, hour, minutes);
+                Log.i(TAG, "Alarm id " + alarmId);
 
-                //SQLiteFragment sqLiteFragment = (SQLiteFragment) mFragmentManager.findFragmentByTag(SQLITE_FRAGMENT_TAG);
-                //sqLiteFragment.executeQuery(insertNewTrainAlarm);
+                InsertNewTrainAlarm insertNewTrainAlarm = new InsertNewTrainAlarm(alarmId, trainStationName, trainNumber, alarmTime);
+
+                createAlarm(alarmId, trainStationName, trainNumber, hour, minutes);
+
+                SQLiteFragment sqLiteFragment = (SQLiteFragment) mFragmentManager.findFragmentByTag(SQLITE_FRAGMENT_TAG);
+                sqLiteFragment.executeQuery(insertNewTrainAlarm);
 
             }
         });
@@ -86,7 +93,7 @@ public class CreatTrainAlarm extends AppCompatActivity {
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(CreatTrainAlarm.this, AlarmList.class));
             }
         });
     }
@@ -105,21 +112,31 @@ public class CreatTrainAlarm extends AppCompatActivity {
 
     }
 
-    private void createAlarm(String trainStationName, String trainNumber, int hour, int minutes){
+    private void createAlarm(int alarmId, String trainStationName, String trainNumber, int hour, int minutes){
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, TrainAlarmBroadcastReciver.class);
         intent.putExtra("trainStationName", trainStationName);
         intent.putExtra("trainNumber", trainNumber);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 57);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minutes);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
 
+        startActivity(new Intent(this, AlarmList.class));
+    }
+
+    private int createUniqueAlarmId(){
+
+        long time = new Date().getTime();
+        String tmpStr = String.valueOf(time);
+        String last4Str = tmpStr.substring(tmpStr.length() - 5);
+
+        return Integer.valueOf(last4Str);
     }
 
 

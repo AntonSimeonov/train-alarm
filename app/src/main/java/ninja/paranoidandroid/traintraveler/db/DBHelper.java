@@ -3,6 +3,7 @@ package ninja.paranoidandroid.traintraveler.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import ninja.paranoidandroid.traintraveler.R;
 import ninja.paranoidandroid.traintraveler.util.DBStatementsExtractor;
@@ -12,6 +13,7 @@ import ninja.paranoidandroid.traintraveler.util.DBStatementsExtractor;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
+    private final static String TAG = "DBHelper";
     private Context mContext;
 
     public DBHelper(Context context){
@@ -28,12 +30,16 @@ public class DBHelper extends SQLiteOpenHelper {
         for (String statement: dbStatements) {
 
             sqLiteDatabase.execSQL(statement);
+            Log.i(TAG, "Statement is " + statement);
 
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS train_alarm");
+        onCreate(sqLiteDatabase);
 
     }
 }

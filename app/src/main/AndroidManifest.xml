@@ -15,10 +15,13 @@
 
         <activity
             android:name=".AlarmList"
-            android:label="@string/title_activity_create_train_alarm"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_alarm_list"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
-        <activity android:name=".CreatTrainAlarm" />
+        <activity android:name=".CreatTrainAlarm"
+            android:label="@string/title_activity_create_train_alarm"
+            />
 
         <activity android:name=".Welcome">
             <intent-filter>

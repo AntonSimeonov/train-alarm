@@ -12,6 +12,11 @@
     tools:context=".AlarmList"
     tools:showIn="@layout/alarms">
 
+    <ListView
+        android:id="@+id/lv_alarm_list_alarms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 
 </RelativeLayout>

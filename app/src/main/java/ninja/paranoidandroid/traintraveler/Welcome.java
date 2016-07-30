@@ -17,7 +17,7 @@ public class Welcome extends AppCompatActivity {
 
         new InitDatabase().execute();
 
-        Intent intent = new Intent(this, CreatTrainAlarm.class);
+        Intent intent = new Intent(this, AlarmList.class);
         startActivity(intent);
     }
 
@@ -27,7 +27,7 @@ public class Welcome extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            new DBHelper(Welcome.this).getReadableDatabase();
+            new DBHelper(Welcome.this);
 
 
             return null;

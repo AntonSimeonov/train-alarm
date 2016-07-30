@@ -27,6 +27,7 @@ public class SQLiteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
     }
 
     //Makes fragment headless with null returned value.
