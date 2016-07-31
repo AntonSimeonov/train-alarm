@@ -7,4 +7,5 @@
     <string name="content_create_train_alarm_train_station_name">Enter train station name</string>
     <string name="content_create_train_alarm_train_number">Enter train number</string>
     <string name="aquire_delay_information_service_notification_tatle">Train info</string>
+    <string name="delete_item_dialog_fragment_message">Delete item</string>
 </resources>

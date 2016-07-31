@@ -100,4 +100,9 @@ public class DBOperations {
         return result;
     }
 
+    public boolean deletetrainAlarm(int alarmId){
+
+        return mSQLiteDataBase.delete(DBContract.TrainAlarm.TABLE_NAME, DBContract.TrainAlarm.COLUMN_ALARM_ID + "=" + alarmId, null) > 0;
+    }
+
 }

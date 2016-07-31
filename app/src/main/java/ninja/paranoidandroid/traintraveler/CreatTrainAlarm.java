@@ -35,6 +35,8 @@ public class CreatTrainAlarm extends AppCompatActivity {
     private SQLiteFragment mSQLiteFragment;
     private FragmentManager mFragmentManager;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +81,8 @@ public class CreatTrainAlarm extends AppCompatActivity {
 
                 InsertNewTrainAlarm insertNewTrainAlarm = new InsertNewTrainAlarm(alarmId, trainStationName, trainNumber, alarmTime);
 
-                createAlarm(alarmId, trainStationName, trainNumber, hour, minutes);
+                //createAlarm(alarmId, trainStationName, trainNumber, hour, minutes);
+                createRepeatingAlarm(alarmId, trainStationName, trainNumber, hour, minutes);
 
                 SQLiteFragment sqLiteFragment = (SQLiteFragment) mFragmentManager.findFragmentByTag(SQLITE_FRAGMENT_TAG);
                 sqLiteFragment.executeQuery(insertNewTrainAlarm);
@@ -128,6 +131,27 @@ public class CreatTrainAlarm extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
 
         startActivity(new Intent(this, AlarmList.class));
+    }
+
+    private void createRepeatingAlarm(int alarmId, String trainStationName, String trainNumber, int hour, int minutes){
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, TrainAlarmBroadcastReciver.class);
+        intent.putExtra("trainStationName", trainStationName);
+        intent.putExtra("trainNumber", trainNumber);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minutes);
+
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 2, alarmIntent);
+
+        startActivity(new Intent(this, AlarmList.class));
+
     }
 
     private int createUniqueAlarmId(){
